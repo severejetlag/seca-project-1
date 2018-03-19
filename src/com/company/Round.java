@@ -21,7 +21,7 @@ public class Round {
         try{
             return  players.get(0);
         }catch (IndexOutOfBoundsException e){
-            System.out.println("Inproper player value, restarting!");
+            System.out.println("Improper player value, restarting!");
             Game game = Game.getInstance();
             game.gameMainMenu();
         }
@@ -32,7 +32,7 @@ public class Round {
         try{
             return players.get(1);
         }catch (IndexOutOfBoundsException e){
-            System.out.println("Inproper player value, restarting!");
+            System.out.println("Improper player value, restarting!");
             Game game = Game.getInstance();
         }
         return null;
