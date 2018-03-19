@@ -1,9 +1,9 @@
 package com.company;
 
 public class Player {
-    protected boolean isComputer;
+    private boolean isComputer;
     protected String choice;
-    protected String name;
+    private String name;
 
     Player(){}
 
