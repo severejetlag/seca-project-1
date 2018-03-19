@@ -5,22 +5,22 @@ import java.util.Random;
 
 public class Player {
     private boolean isComputer;
-    protected String choice;
+    private String choice;
     private String name;
     private boolean isWinner = false;
-    private ArrayList<String> answers = new ArrayList<String>(){{
+    private static ArrayList<String> answers = new ArrayList<String>(){{
         add("rock");
         add("paper");
         add("scissors");
     }};
 
-    Player(){}
-
     public Player(boolean isComputer, String name) {
         this.isComputer = isComputer;
         this.name = name;
     }
-
+    public ArrayList<String> getAnswers(){
+        return answers;
+    }
     public void setChoice(String choice) {
         this.choice = choice;
     }

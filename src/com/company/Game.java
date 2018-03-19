@@ -5,11 +5,10 @@ import java.util.Scanner;
 
 public class Game {
     private static Game game = null;
-    private String state;
     private ArrayList<Round> rounds;
 
     private Game() {
-        rounds = new ArrayList<Round>();
+        rounds = new ArrayList<>();
     }
 
     public static Game getInstance(){
@@ -19,25 +18,14 @@ public class Game {
         return game;
     }
 
-    public void setGameState(String state) {
-        this.state = state;
-    }
-
-    public String getGameState(){
-        return this.state;
-    }
-
-    public ArrayList<Round> getRounds() {
-        return rounds;
-    }
-
-    public void addRound(Round round) {
-        this.rounds.add(round);
-    }
-
     private String userInputRequest(){
         Scanner inputScanner = new Scanner(System.in);
-        return inputScanner.nextLine().toLowerCase();
+        String userInput = inputScanner.nextLine().toLowerCase();
+        if(userInput.equals("quit")){
+            System.out.println("\nThanks for playing!");
+            System.exit(0);
+        }
+        return userInput;
     }
 
     private Round getCurrentRound(){
@@ -45,9 +33,8 @@ public class Game {
     }
 
     public void gameMainMenu(){
-        this.state = "mainMenu";
         System.out.println("Welcome to Rock Paper Scissors!\n" +
-                "MAIN MENU\n" +
+                "\nMAIN MENU\n" +
                 "=====\n" +
                 "1. Type 'play' to play\n" +
                 "2. Type 'history' to view your game history\n" +
@@ -55,17 +42,21 @@ public class Game {
 
         String response = userInputRequest();
 
-        if(response.equals("play")){
-            this.gamePlayMenu();
-        }else if(response.equals("history")){
-            this.gameHistoryMenu();
-        }else{
-            System.out.println("Input not recognized, please try again.");
-            this.gameMainMenu();
+        switch (response) {
+            case "play":
+                this.gamePlayMenu();
+                break;
+            case "history":
+                this.gameHistoryMenu();
+                break;
+            default:
+                System.out.println("Input not recognized, please try again.");
+                this.gameMainMenu();
+                break;
         }
     }
 
-    public void gameHistoryMenu(){
+    private void gameHistoryMenu(){
         System.out.println("=== GAME HISTORY ===");
         for(int i = 0; i < rounds.size(); i++){
             Round round = rounds.get(i);
@@ -89,54 +80,80 @@ public class Game {
         this.gameMainMenu();
     }
 
-    public void gamePlayMenu(){
-        this.state = "playerSelect";
+    private void gamePlayMenu(){
         System.out.println("1. Type 'pvp' for player vs player\n"+
                 "2. Type 'pvc' for player vs computer");
         String response = userInputRequest();
-        if(response.equals("pvp")){
-            System.out.println("Player VS. Player");
-            Player player1 = new Player(false, "Player 1");
-            Player player2 = new Player(false, "Player 2");
-            Round round = new Round(false);
-            round.addPlayer(player1);
-            round.addPlayer(player2);
-            this.rounds.add(round);
-            this.gameRoundMenu();
-        }else if(response.equals("pvc")){
-            System.out.println("Player VS. Computer");
-            Player player1 = new Player(false, "Player 1");
-            Player computer = new Player(true, "Computer");
-            Round round = new Round(true);
-            round.addPlayer(player1);
-            round.addPlayer(computer);
-            this.rounds.add(round);
-            this.gameRoundMenu();
+        switch (response) {
+            case "pvp": {
+                System.out.println("Player VS. Player");
+                Player player1 = new Player(false, "Player 1");
+                Player player2 = new Player(false, "Player 2");
+                Round round = new Round(false);
+                round.addPlayer(player1);
+                round.addPlayer(player2);
+                this.rounds.add(round);
+                this.gameRoundMenuPlayer1();
+                break;
+            }
+            case "pvc": {
+                System.out.println("Player VS. Computer");
+                Player player1 = new Player(false, "Player 1");
+                Player computer = new Player(true, "Computer");
+                Round round = new Round(true);
+                round.addPlayer(player1);
+                round.addPlayer(computer);
+                this.rounds.add(round);
+                this.gameRoundMenuPlayer1();
 
-        }else{
-            System.out.println("Input not recognized, please try again.");
-            this.gamePlayMenu();
+                break;
+            }
+            default:
+                System.out.println("Input not recognized, please try again.");
+                this.gamePlayMenu();
+                break;
         }
     }
 
-    public void gameRoundMenu(){
-        this.state = "round";
+    private void gameRoundMenuPlayer1(){
         Round currentRound = getCurrentRound();
         Player player1 = currentRound.getPlayer1();
-        Player player2 = currentRound.getPlayer2();
         System.out.println("Player 1 type 'rock', 'paper', or 'scissors'");
-        player1.setChoice(userInputRequest());
-
-        if(currentRound.isVsComputer()){
-            player2.randomChoice();
+        String userInput = userInputRequest();
+        if(player1.getAnswers().contains(userInput)){
+            player1.setChoice(userInput);
+            gameRoundMenuPlayer2();
         }else{
-            System.out.println("Player 2 type 'rock', 'paper', or 'scissors'");
-            player2.setChoice(userInputRequest());
+            System.out.println("Input not recognized, please try again.");
+            gameRoundMenuPlayer1();
         }
+    }
 
+    private void gameRoundMenuPlayer2() {
+        Round currentRound = getCurrentRound();
+        Player player2 = currentRound.getPlayer2();
+
+        if (currentRound.isVsComputer()) {
+            player2.randomChoice();
+            gameCheckWinner();
+        } else {
+            System.out.println("Player 2 type 'rock', 'paper', or 'scissors'");
+            String userInput = userInputRequest();
+            if (player2.getAnswers().contains(userInput)) {
+                player2.setChoice(userInput);
+                gameCheckWinner();
+            } else {
+                System.out.println("Input not recognized, please try again.");
+                this.gameRoundMenuPlayer2();
+            }
+        }
+    }
+
+    private void gameCheckWinner(){
+        Round currentRound = getCurrentRound();
         currentRound.checkWinner();
         if(currentRound.getIsTie()){
-            System.out.println("It was a tie! There is no winner!");
+            System.out.println("\nIt was a tie! There is no winner!\n");
             this.gameMainMenu();
         }else{
             System.out.println(currentRound.getWinner().getName() +
@@ -144,7 +161,6 @@ public class Game {
                     currentRound.getWinner().getChoice());
             this.gameMainMenu();
         }
-
     }
 
 }

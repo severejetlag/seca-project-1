@@ -1,7 +1,6 @@
 package com.company;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Round {
 
@@ -47,7 +46,7 @@ public class Round {
                 isTie = true;
             }
         } else if (player1.getChoice().equals("scissors")) {
-            if (player2.equals("paper")) {
+            if (player2.getChoice().equals("paper")) {
                 player1.setIsWinner();
             } else if (player2.getChoice().equals("rock")) {
                 player2.setIsWinner();
