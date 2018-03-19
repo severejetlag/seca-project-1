@@ -3,11 +3,13 @@ package com.company;
 public class Player {
     protected boolean isComputer;
     protected String choice;
+    protected String name;
 
-    Player(){};
+    Player(){}
 
-    public Player(boolean isComputer) {
+    public Player(boolean isComputer, String name) {
         this.isComputer = isComputer;
+        this.name = name;
     }
 
     public void setChoice(String choice) {
