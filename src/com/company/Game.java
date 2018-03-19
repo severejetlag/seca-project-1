@@ -58,6 +58,9 @@ public class Game {
 
     private void gameHistoryMenu(){
         System.out.println("=== GAME HISTORY ===");
+        if(rounds.size()==0){
+            System.out.println("There have been no rounds played!");
+        }
         for(int i = 0; i < rounds.size(); i++){
             Round round = rounds.get(i);
             if(round.getIsTie()){

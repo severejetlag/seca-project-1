@@ -18,13 +18,25 @@ public class Round {
     }
 
     public Player getPlayer1(){
-        return  players.get(0);
+        try{
+            return  players.get(0);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println("Inproper player value, restarting!");
+            Game game = Game.getInstance();
+            game.gameMainMenu();
+        }
+        return null;
     }
 
     public Player getPlayer2(){
-        return players.get(1);
+        try{
+            return players.get(1);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println("Inproper player value, restarting!");
+            Game game = Game.getInstance();
+        }
+        return null;
     }
-
 
     public void addPlayer(Player player){
         this.players.add(player);
