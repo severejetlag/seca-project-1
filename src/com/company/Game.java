@@ -66,7 +66,27 @@ public class Game {
     }
 
     public void gameHistoryMenu(){
-
+        System.out.println("=== GAME HISTORY ===");
+        for(int i = 0; i < rounds.size(); i++){
+            Round round = rounds.get(i);
+            if(round.getIsTie()){
+                System.out.println(i+1 + ": " + round.getPlayer1().getName() +
+                " tied with " +
+                round.getPlayer2().getName());
+            }else{
+                if(round.getPlayer1().getIsWinner()){
+                    System.out.println(i+1 + ": " + round.getPlayer1().getName() +
+                            " beat " + round.getPlayer2().getName() +
+                            " with " + round.getPlayer1().getChoice());
+                }else{
+                    System.out.println(i+1 + ": " + round.getPlayer2().getName() +
+                            " beat " + round.getPlayer1().getName() +
+                            " with " + round.getPlayer2().getChoice());
+                }
+            }
+        }
+        System.out.println("\n");
+        this.gameMainMenu();
     }
 
     public void gamePlayMenu(){
@@ -86,7 +106,7 @@ public class Game {
         }else if(response.equals("pvc")){
             System.out.println("Player VS. Computer");
             Player player1 = new Player(false, "Player 1");
-            Computer computer = new Computer();
+            Player computer = new Player(true, "Computer");
             Round round = new Round(true);
             round.addPlayer(player1);
             round.addPlayer(computer);
@@ -103,17 +123,28 @@ public class Game {
         this.state = "round";
         Round currentRound = getCurrentRound();
         Player player1 = currentRound.getPlayer1();
+        Player player2 = currentRound.getPlayer2();
         System.out.println("Player 1 type 'rock', 'paper', or 'scissors'");
         player1.setChoice(userInputRequest());
 
         if(currentRound.isVsComputer()){
-            Computer computer = currentRound.getComputer();
-            computer.randomChoice();
+            player2.randomChoice();
         }else{
-            Player player2 = currentRound.getPlayer2();
             System.out.println("Player 2 type 'rock', 'paper', or 'scissors'");
             player2.setChoice(userInputRequest());
         }
+
+        currentRound.checkWinner();
+        if(currentRound.getIsTie()){
+            System.out.println("It was a tie! There is no winner!");
+            this.gameMainMenu();
+        }else{
+            System.out.println(currentRound.getWinner().getName() +
+                    " wins with " +
+                    currentRound.getWinner().getChoice());
+            this.gameMainMenu();
+        }
+
     }
 
 }
