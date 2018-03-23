@@ -38,6 +38,8 @@ public class Player {
     }
 
     public void randomChoice(){
+        // Looked up how to get random number in java
+        //https://stackoverflow.com/questions/20389890/generating-a-random-number-between-1-and-10-java
         Random random = new Random();
         this.choice = answers.get(random.nextInt(2 - 0 + 1) + 0);
     }

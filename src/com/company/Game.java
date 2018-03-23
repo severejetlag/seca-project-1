@@ -11,6 +11,7 @@ public class Game {
         rounds = new ArrayList<>();
     }
 
+    //Instantiate singleton based off or labs
     public static Game getInstance(){
         if(game == null){
             game = new Game();
@@ -23,6 +24,8 @@ public class Game {
         String userInput = inputScanner.nextLine().toLowerCase();
         if(userInput.equals("quit")){
             System.out.println("\nThanks for playing!");
+            // Borrowed from stack overflow
+            //https://stackoverflow.com/questions/21962027/is-there-a-way-to-end-the-program-if-statement-is-false
             System.exit(0);
         }
         return userInput;
@@ -165,5 +168,4 @@ public class Game {
             this.gameMainMenu();
         }
     }
-
 }

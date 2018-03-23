@@ -17,6 +17,8 @@ public class Round {
         return isVsComputer;
     }
 
+    // Looked up IndexOutOfBoundsException
+    // https://stackoverflow.com/questions/36136526/java-try-catch-not-handling-indexoutofboundsexception
     public Player getPlayer1(){
         try{
             return  players.get(0);
